@@ -40,43 +40,6 @@
 
   /*
         Author: Luis Arias
-        Description: Make a login and return the reult token in a callback function.
-        @param { function } callback 
-            @param object { 
-                username: "",
-                password: "",
-                token: ""
-            }
-    */
-  var login = async (callback) => {
-    var resultToken = "";
-    const host = pm.variables.get("url");
-    const username = pm.variables.get("auth.username");
-    const password = pm.variables.get("auth.password");
-    const echoPostRequest = {
-      url: `${host}/auth/login`,
-      method: "POST",
-      header: "Content-Type:application/json",
-      body: {
-        mode: "raw",
-        raw: { searchParam: username, password },
-      },
-    };
-
-    await pm.sendRequest(echoPostRequest, (err, response) => {
-      // console.log(response.json());
-      resultToken = response.json().refreshToken || response.json().accessToken;
-      // console.log('token', resultToken)
-      pm.environment.set("bearer", resultToken);
-      pm.environment.set("token", resultToken);
-      if (typeof callback === "function") {
-        callback({ username, password, token: resultToken });
-      }
-    });
-  };
-
-  /*
-        Author: Luis Arias
         Description: Gets a random number lower than the parameter
         @param { number } max: Max number to return
     */
@@ -109,7 +72,6 @@
   return {
     utils: {
       randomStr,
-      login,
       getRandomInt,
       getOneOf,
       getRandomIntBetween,
